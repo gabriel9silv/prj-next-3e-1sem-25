@@ -8,6 +8,9 @@ import { Flex, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 
 
+
+
+
 const LoginScreenW = () => {
 
   const [isMobile, setIsMobile] = useState(false);

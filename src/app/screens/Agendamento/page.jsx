@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import styles from './page.module.css';
 import styled from 'styled-components';
-import CalendarComponent from '../../components/calendario/page';
+import MyCalendar from '../../components/calendario/page'; // importando o componente do calendário
 
 const Tela2 = () => {
   const [liked, setLiked] = useState(false);
@@ -123,7 +123,7 @@ const Tela2 = () => {
                   <div className={styles.disponivel}>
                     <h1>Disponibilidade</h1>
                   </div>
-                  <CalendarComponent />
+                  <MyCalendar />
                 </div>
               </div>
             </div>

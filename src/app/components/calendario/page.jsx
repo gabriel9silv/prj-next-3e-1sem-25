@@ -1,76 +1,49 @@
 import React, { useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import styled from 'styled-components';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import '../calendario/page.module.css'; // Importa o arquivo CSS
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-`;
+const MyCalendar = () => {
+  const [selectedDate, setSelectedDate] = useState(null);
 
-const AgendaButton = styled.button`
-  padding: 8px 16px;
-  font-size: 16px;
-  background-color: #1a73e8;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-`;
-
-const OcupadoLabel = styled.div`
-  margin-top: 10px;
-  font-size: 16px;
-  color: red;
-`;
-
-const CalendarioAgendamentos = () => {
-  const [date, setDate] = useState(new Date());
-  const [agendamentos, setAgendamentos] = useState({});
-
-  const handleDateChange = (newDate) => {
-    setDate(newDate);
+  const handleDateClick = (arg) => {
+    setSelectedDate(arg.dateStr);
   };
 
-  const handleAgendar = () => {
-    const formattedDate = date.toISOString().split('T')[0];
-    setAgendamentos({ ...agendamentos, [formattedDate]: true });
-  };
+  const renderDayCell = (info) => {
+    const date = info.date.toISOString().split('T')[0];
+    const isSelected = date === selectedDate;
 
-  const isDateOcupado = (date) => {
-    const formattedDate = date.toISOString().split('T')[0];
-    return agendamentos[formattedDate];
-  };
-
-  const renderTileContent = ({ date, view }) => {
-    if (view === 'month' && isDateOcupado(date)) {
-      return <OcupadoLabel>Ocupado</OcupadoLabel>;
-    }
+    return (
+      <div
+        className={`fc-daygrid-day${isSelected ? ' selected-date' : ''}`}
+        onClick={() => handleDateClick(info.date)}
+      >
+        {info.dayNumberText}
+      </div>
+    );
   };
 
   return (
-    <Container>
-      <Calendar
-        onChange={handleDateChange}
-        value={date}
-        tileContent={renderTileContent}
+    <div>
+      <FullCalendar
+        plugins={[dayGridPlugin]}
+        initialView="dayGridMonth"
+        events={[
+          { title: 'Evento 1', date: '2024-08-01' },
+          { title: 'Evento 2', date: '2024-08-05' },
+          { title: 'LAB5', date: '2024-08-20' },
+        ]}
+        dateClick={handleDateClick}
+        dayCellContent={renderDayCell}
       />
-      <AgendaButton
-        onClick={handleAgendar}
-        disabled={isDateOcupado(date)}
-      >
-        {isDateOcupado(date) ? 'Já Agendado' : 'Agendar Data'}
-      </AgendaButton>
-    </Container>
+      {selectedDate && (
+        <div style={{ marginTop: '20px' }}>
+          <h3>Data Selecionada: {selectedDate}</h3>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default CalendarioAgendamentos;
+export default MyCalendar;
